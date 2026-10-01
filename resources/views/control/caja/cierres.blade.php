@@ -14,22 +14,22 @@
                border-bottom: 2px solid var(--tinta); padding-bottom: 12px; margin: 10px 0 18px; }
     .cc-head h1 { margin:0; font-size: 28px; font-weight: 600; }
     .cc-head .sub { color: var(--suave); font-size: 14px; margin-top: 4px; }
-    .cc-card { background:#fff; border:1px solid var(--linea); border-radius: 10px; overflow: hidden; }
-    .cc-table { width:100%; border-collapse: collapse; font-size: 15px; }
+    .cc-card { background:#fff; border:1px solid var(--linea); border-radius: 10px; overflow-x: auto; }
+    .cc-table { width:100%; border-collapse: collapse; font-size: 14px; }
     .cc-table th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--suave); font-weight: 600;
-                   padding: 11px 14px; background: var(--fondo); border-bottom: 1px solid var(--linea); text-align: left; white-space: nowrap; }
-    .cc-table td { padding: 11px 14px; border-bottom: 1px solid var(--linea); vertical-align: middle; font-variant-numeric: tabular-nums; }
+                   padding: 10px 10px; background: var(--fondo); border-bottom: 1px solid var(--linea); text-align: left; white-space: nowrap; }
+    .cc-table td { padding: 10px 10px; white-space: nowrap; border-bottom: 1px solid var(--linea); vertical-align: middle; font-variant-numeric: tabular-nums; }
     .cc-table tr:last-child td { border-bottom: 0; }
     .cc-table tr:hover td { background: #fafbfd; }
     .cc-table .r { text-align: right; }
     .cc-table .c { text-align: center; }
     .cc-fecha { font-weight: 600; }
-    .cc-hora { color: var(--suave); font-size: 14px; white-space: nowrap; }
+    .cc-hora { color: var(--suave); font-size: 13px; }
     .cc-hora small { white-space: nowrap; }
     .cc-num { color: var(--suave); }
     .cc-efec { font-weight: 700; }
     .cc-acc { white-space: nowrap; text-align: right; }
-    .cc-acc .btn { padding: 6px 12px; font-size: 14px; margin-left: 4px; }
+    .cc-acc .btn { padding: 4px 9px; font-size: 13px; margin-left: 3px; }
     .cc-empty { padding: 30px 16px; text-align:center; color: var(--suave); }
     .cc-pag { margin-top: 14px; }
 </style>
@@ -52,8 +52,8 @@
                         <th>Turno</th>
                         <th>Cerró</th>
                         <th class="c">Ventas</th>
-                        <th class="r">Efectivo en caja</th>
-                        <th class="r">Total del turno</th>
+                        <th class="r">Efectivo</th>
+                        <th class="r">Total</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -61,7 +61,7 @@
                     @foreach($cierres as $c)
                         <tr>
                             <td class="cc-num">{{ $c->id }}</td>
-                            <td class="cc-fecha">{{ date('d/m/Y', strtotime($c->cierre)) }}</td>
+                            <td class="cc-fecha">{{ date('d/m/y', strtotime($c->cierre)) }}</td>
                             <td class="cc-hora">
                                 {{ $c->apertura ? date('H:i', strtotime($c->apertura)) : '--:--' }}
                                 &rarr; {{ date('H:i', strtotime($c->cierre)) }}
