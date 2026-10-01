@@ -120,9 +120,9 @@
                     </label>
                 </div>
 
-                <div class="form-group col-md-1">
+                <div class="form-group col-md-2">
                     <label>&nbsp;</label>
-                    <button type="submit" class="btn btn-success form-control">
+                    <button type="submit" class="btn btn-success" style="white-space: nowrap;">
                         <span class="oi oi-check" style="display: inline-block; top: 2px;"></span> Guardar
                     </button>
                 </div>

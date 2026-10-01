@@ -29,14 +29,12 @@
                 </div>
                 @if($caja_abierta)
                     <button disabled type="submit" class="btn btn-success mb-2">( Abierta )</button>
-                    {{-- Button trigger modal --}}
                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Cerrar</button>
                 @else
                     <button disabled type="button" class="btn btn-danger">( Cerrada )</button>    
                     <button type="submit" class="btn btn-success mb-2">Abrir</button>
                 @endif
-                
-                <!-- Modal -->
+
                 <div class="modal fade" id="exampleModal" tabindex="-1" style="padding-top: 150px;" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-sm" role="document">
                         <div class="modal-content">

@@ -264,6 +264,71 @@ class OrderProductController extends Controller
      * @param  \App\OrderProduct  $orderProduct
      * @return \Illuminate\Http\Response
      */
+    public function updateCantidad(Request $request, $id)
+    {
+        $nueva = str_replace(',', '.', $request->cantidad);
+
+        if (!is_numeric($nueva) || $nueva <= 0) {
+            return response()->json([
+                'titulo' => 'Cantidad inválida',
+                'message' => 'La cantidad tiene que ser mayor a 0',
+            ], 422);
+        }
+
+        $subOrder = OrderProduct::findOrFail($id);
+        $order = Order::findOrFail($subOrder->id_order);
+
+        if ($order->completada == 1) {
+            return response()->json([
+                'titulo' => 'Orden cerrada',
+                'message' => 'No se puede modificar una venta ya cobrada',
+            ], 403);
+        }
+
+        $product = Product::findOrFail($subOrder->id_producto);
+        $anterior = (float) $subOrder->cantidad;
+        $nueva = (float) $nueva;
+        $delta = $nueva - $anterior;
+
+        if (abs($delta) < 0.0000001) {
+            return response()->json(['message' => 'Sin cambios', 'status' => 'OK'], 200);
+        }
+
+        $category = ProductCategory::where('id', $product->id_categoria)->first();
+        $unidad = $category ? $category->unidad : '';
+
+        if ($delta > 0 && $product->quedan < $delta) {
+            return response()->json([
+                'titulo' => 'Imposible vender ' . $nueva . ' ' . $unidad,
+                'message' => 'Solo quedan ' . $product->quedan . ' ' . $unidad . ' en STOCK',
+            ], 403);
+        }
+
+        DB::transaction(function () use ($subOrder, $product, $delta, $anterior, $nueva) {
+            $diffMonto = ceil($subOrder->monto * $nueva) - ceil($subOrder->monto * $anterior);
+
+            $subOrder->cantidad = $nueva;
+            $subOrder->save();
+
+            if ($delta > 0) {
+                $product->decrement('quedan', $delta);
+            } else {
+                $product->increment('quedan', abs($delta));
+            }
+
+            if ($diffMonto > 0) {
+                Order::where('id', $subOrder->id_order)->increment('monto', $diffMonto);
+            } elseif ($diffMonto < 0) {
+                Order::where('id', $subOrder->id_order)->decrement('monto', abs($diffMonto));
+            }
+        });
+
+        return response()->json([
+            'message' => 'Cantidad actualizada: ' . $nueva . ' ' . $unidad . ' de ' . $product->nombre,
+            'status' => 'OK',
+        ], 200);
+    }
+
     public function delete($id)
     {
         $subOrder = OrderProduct::findOrFail($id);

@@ -128,8 +128,8 @@
 										@else
 										<td class="text-center">{{ sprintf("%.3f", $item->cantidad) }}</td>
 										@endif
-										<td class="text-center"><b>$</b>{{ sprintf("%.2f", $item->monto) }}</td>
-										<td class="text-center"><b>$</b>{{ sprintf("%.2f", ceil($item->monto * $item->cantidad)) }}</td>
+										<td class="text-center"><b>$</b>{{ number_format($item->monto, 0, ',', '.') }}</td>
+										<td class="text-center"><b>$</b>{{ number_format(ceil($item->monto * $item->cantidad), 0, ',', '.') }}</td>
 									</tr>
 								@endforeach
 							@else {{--  Si CONCEPTO == VARIOS o si se eligió generar una Nota de Crédito --}}
@@ -137,15 +137,15 @@
 									<tr>
 										<td>{{ ucfirst(strtolower($concepto)) }}</td>
 										<td class="text-center">1</td>
-										<td class="text-center"><b>$</b>{{ sprintf("%.2f", ($impTotal - $montoOpcional)) }}</td>
-										<td class="text-center"><b>$</b>{{ sprintf("%.2f", ($impTotal - $montoOpcional)) }}</td>
+										<td class="text-center"><b>$</b>{{ number_format($impTotal - $montoOpcional, 0, ',', '.') }}</td>
+										<td class="text-center"><b>$</b>{{ number_format($impTotal - $montoOpcional, 0, ',', '.') }}</td>
 									</tr>
 								@else 
 									<tr>
 										<td>{{ $concepto }}</td>
 										<td class="text-center">1</td>
-										<td class="text-center"><b>$</b>{{ $impTotal }}</td>
-										<td class="text-center"><b>$</b>{{ $impTotal }}</td>
+										<td class="text-center"><b>$</b>{{ number_format($impTotal, 0, ',', '.') }}</td>
+										<td class="text-center"><b>$</b>{{ number_format($impTotal, 0, ',', '.') }}</td>
 									</tr>
 								@endif
 							@endif
@@ -154,8 +154,8 @@
 								<tr>
 									<td>{{ ucfirst(strtolower($detalleOpcional)) }}</td>
 									<td class="text-center">1</td>
-									<td class="text-center"><b>$</b>{{ sprintf("%.2f", $montoOpcional) }}</td>
-									<td class="text-center"><b>$</b>{{ sprintf("%.2f", $montoOpcional) }}</td>
+									<td class="text-center"><b>$</b>{{ number_format($montoOpcional, 0, ',', '.') }}</td>
+									<td class="text-center"><b>$</b>{{ number_format($montoOpcional, 0, ',', '.') }}</td>
 								</tr>
 							@endif
 							
@@ -165,11 +165,11 @@
 							@if (isset($caenum) && $docTipo == 80 && $tipoCbte != "C") 
 								<tr>
 									<td colspan="3" class="text-right"><strong>Subtotal Neto</strong></td> 
-									<td class="text-center"><b>$</b>{{ $impNeto }}</td>
+									<td class="text-center"><b>$</b>{{ number_format($impNeto, 0, ',', '.') }}</td>
 								</tr>
 								<tr>
 									<td colspan="3" class="text-right"><strong>IVA</strong></td>
-									<td class="text-center"><b>$</b>{{ $impIVA }}</td>
+									<td class="text-center"><b>$</b>{{ number_format($impIVA, 0, ',', '.') }}</td>
 								</tr>
 							@endif
 							@if ($descuento > 0 && ((isset($caenum) && $cbte != "NDC") || !isset($caenum)))
@@ -177,7 +177,7 @@
 								<td colspan="3" class="text-right">
 									<strong>Descuento</strong>
 								</td>
-								<td class="text-right"><b>$</b>{{ $descuento }}</td>
+								<td class="text-right"><b>$</b>{{ number_format($descuento, 0, ',', '.') }}</td>
 							</tr>
 							@endif
 							<tr>
@@ -188,7 +188,7 @@
 									<strong>Total</strong>
 									@endif
 								</td>
-								<td class="text-right"><b>$</b>{{ $impTotal }}</td>
+								<td class="text-right"><b>$</b>{{ number_format($impTotal, 0, ',', '.') }}</td>
 							</tr>
 						</tbody>
 					</table>

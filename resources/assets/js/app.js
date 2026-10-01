@@ -160,6 +160,39 @@ window.onload = function () {
                             toastr.error(response.data.message);
                         });
                 },
+                formatCantidad: function (cantidad) {
+                    var n = parseFloat(cantidad);
+                    if (isNaN(n)) {
+                        return cantidad;
+                    }
+                    if (Math.abs(n - Math.round(n)) < 0.0000001) {
+                        return String(Math.round(n));
+                    }
+                    return String(n);
+                },
+                updateCantidad: function (subOrden, event) {
+                    var nueva = String(event.target.value).replace(',', '.').trim();
+                    var cantidad = parseFloat(nueva);
+                    if (!cantidad || cantidad <= 0 || isNaN(cantidad)) {
+                        event.target.value = this.formatCantidad(subOrden.cantidad);
+                        toastr.error('La cantidad tiene que ser mayor a 0');
+                        return;
+                    }
+                    if (parseFloat(subOrden.cantidad) === cantidad) {
+                        event.target.value = this.formatCantidad(subOrden.cantidad);
+                        return;
+                    }
+                    var self = this;
+                    axios.post('/admin/updatesuborden/' + subOrden.id, {
+                        cantidad: cantidad
+                    }).then(function (response) {
+                        self.getSubOrdenes();
+                        toastr.success(response.data.message);
+                    }).catch(function (error) {
+                        event.target.value = self.formatCantidad(subOrden.cantidad);
+                        toastr.error(error.response.data.message, error.response.data.titulo);
+                    });
+                },
                 setFocus: function () {
                     // Note, you need to add a ref="search" attribute to your input.
                     if (this.$refs.codigo) {
@@ -252,9 +285,9 @@ window.onload = function () {
                     });
                 }, 500),
                 selectProduct: function (product) {
-                    this.newCod = product.codigo;
                     this.productsFound = [];
-                    this.setFocus();
+                    this.newCod = null;
+                    this.addSubOrder(product);
                 }
             },
             computed: {

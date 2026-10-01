@@ -293,6 +293,7 @@ Route::group(['middleware' => 'is_admin'], function ()
 
     Route::post('/admin/createsuborden_svc/{id_order}', 'OrderProductController@store_service');
 
+    Route::post('/admin/updatesuborden/{id}', 'OrderProductController@updateCantidad');
     Route::delete('/admin/deletesuborden/{id}', 'OrderProductController@delete');
     Route::delete('/admin/deletesuborden_svc/{id}', 'OrderProductController@delete_svc');
 

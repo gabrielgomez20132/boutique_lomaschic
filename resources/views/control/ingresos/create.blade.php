@@ -125,7 +125,7 @@
             <div style="margin-top: 2px; margin-left: auto;">
                 @if($order->completada != 1)
                     <div class="form-group col-md-12" style="margin-top: 0px;padding-left: 0px; padding-right: 0px;">
-                        <form method="POST" action="/admin/control/{{$tipo}}/cerrar/{{ $order->id }}">
+                        <form id="form-cerrar-orden" method="POST" action="/admin/control/{{$tipo}}/cerrar/{{ $order->id }}">
                             {!!csrf_field()!!}
                             
                             <div v-if="clienteElegido == 2" class="form-group col-md-2" style="padding-left: 0px;">
@@ -264,15 +264,6 @@
 
                             <input name="descuento" type="hidden" v-bind:value="this.descuento">
 
-                            <div class="form-group col-md-2" style="padding-left: 0px; padding-right: 0px;">
-                                <label>&nbsp;</label>
-                                <template v-if="!puedeCerrarOrden">
-                                    <button type="submit" disabled class="btn btn-danger btn-block"><b>CERRAR</b></button>
-                                </template>
-                                <template v-else>
-                                    <button type="submit" class="btn btn-danger btn-block"><b>CERRAR</b></button>
-                                </template>
-                            </div>
                         </form>
                     </div>
                     
@@ -367,7 +358,7 @@
                 @endif
             </div>
             
-            <table class="table table-striped" style="font-size: 14px; margin-bottom: 92px; z-index: 1; position: relative;">
+            <table class="table table-striped" style="font-size: 14px; margin-bottom: {{ $order->completada == 1 ? '92px' : '16px' }}; z-index: 1; position: relative;">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Cant.</th>
@@ -384,16 +375,21 @@
                 </thead>
                 <tbody>
                     <tr v-for="subOrden in subOrdenes">
-                        <td v-if="parseInt(subOrden.cantidad) == subOrden.cantidad">!{ subOrden.cantidad }! 
-                            <b v-if="subOrden.cantidad == 1 && subOrden.unidad.substring(subOrden.unidad.length - 1) ==='s'">
+                        <td style="white-space: nowrap;">
+                            @if($order->completada != 1)
+                                <input v-if="subOrden.tipo == 'prod'" type="text" class="form-control input-sm text-center"
+                                    style="width: 58px; display: inline-block; height: 30px; padding: 2px 4px;"
+                                    :value="formatCantidad(subOrden.cantidad)"
+                                    @change="updateCantidad(subOrden, $event)"
+                                    @keyup.enter="$event.target.blur()">
+                                <span v-else>!{ formatCantidad(subOrden.cantidad) }!</span>
+                            @else
+                                <span>!{ formatCantidad(subOrden.cantidad) }!</span>
+                            @endif
+                            <b v-if="subOrden.cantidad == 1 && subOrden.unidad && subOrden.unidad.substring(subOrden.unidad.length - 1) === 's'">
                                 !{ subOrden.unidad.substring(0, subOrden.unidad.length - 1) }!
                             </b>
-                            <b v-else>
-                                !{ subOrden.unidad }!
-                            </b>
-                        </td>
-                        <td v-else>!{ subOrden.cantidad.toFixed(3) }! 
-                            <b>!{ subOrden.unidad }!</b>
+                            <b v-else>!{ subOrden.unidad }!</b>
                         </td>
                         <td>
                             !{ subOrden.nombre }!
@@ -422,6 +418,17 @@
                     </tr>
                 </tbody>
             </table>
+
+            @if($order->completada != 1)
+                <div class="text-center" style="margin-bottom: 30px;">
+                    <template v-if="!puedeCerrarOrden">
+                        <button type="submit" form="form-cerrar-orden" disabled class="btn btn-danger"><b>Cobrar</b></button>
+                    </template>
+                    <template v-else>
+                        <button type="submit" form="form-cerrar-orden" class="btn btn-danger"><b>Cobrar</b></button>
+                    </template>
+                </div>
+            @endif
             
             @if ($order->completada == 1)
                 <div class="row">

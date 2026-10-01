@@ -179,7 +179,7 @@
     </div>
     
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}?v=1.0.1"></script>
+    <script src="{{ asset('js/app.js') }}?v=1.0.3"></script>
         <footer class="footer">
             <div class="container">
                 <span class="text-muted"><!-- Por <b>Unlimited Soft</b> | Copyright &copy; 2022 -->
