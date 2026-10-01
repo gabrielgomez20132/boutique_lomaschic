@@ -17,7 +17,7 @@ class ProductCategoryController extends Controller
      */
     public function index()
     {
-        $categories = ProductCategory::where('activa', 1)->orderBy('nombre')->get();
+        $categories = ProductCategory::where('activa', 1)->orderBy('id')->get();
         $type = "categoria";
         $activas = true;
         return view('categories.index', compact('categories','type','activas'));
@@ -120,7 +120,7 @@ class ProductCategoryController extends Controller
 
     public function papelera()
     {
-        $categories = ProductCategory::where('activa', 0)->orderBy('nombre')->get();
+        $categories = ProductCategory::where('activa', 0)->orderBy('id')->get();
         $type = "categoria";
         $activas = false;
         return view('categories.index', compact('categories','type','activas'));

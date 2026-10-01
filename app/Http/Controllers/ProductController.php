@@ -24,7 +24,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $categories = ProductCategory::where('activa', 1)->orderBy('nombre')->get();
+        $categories = ProductCategory::where('activa', 1)->orderBy('id')->get();
         $talles = ProductTalle::where('activa', 1)->orderBy('nombre')->get();
         $colors = ProductColor::where('activa', 1)->orderBy('nombre')->get();
         $marcas = ProductMarca::where('activa', 1)->orderBy('nombre')->get();
@@ -42,7 +42,7 @@ class ProductController extends Controller
     // public function search(Request $request)
     // {
     //     $keyword = $request->keyword;
-    //     $categories = ProductCategory::where('activa', 1)->orderBy('nombre')->get();
+    //     $categories = ProductCategory::where('activa', 1)->orderBy('id')->get();
     //     $products = Product::where('nombre', 'LIKE', "%$keyword%")->orderBy('nombre')->paginate(5000);
     //     $type = "producto";
 
@@ -51,7 +51,7 @@ class ProductController extends Controller
 
     public function filter(Request $request)
     {
-        $categories = ProductCategory::where('activa', 1)->orderBy('nombre')->get();
+        $categories = ProductCategory::where('activa', 1)->orderBy('id')->get();
 
         $talles = ProductTalle::where('activa', 1)->orderBy('nombre')->get();
         $colors = ProductColor::where('activa', 1)->orderBy('nombre')->get();
@@ -87,7 +87,7 @@ $sortOrder = $request->get('order', 'desc');
     public function create()
     {
         $type = "producto";
-        $categories = ProductCategory::where('activa', 1)->orderBy('nombre')->get();
+        $categories = ProductCategory::where('activa', 1)->orderBy('id')->get();
         $marcas = ProductMarca::where('activa', 1)->orderBy('nombre')->get();
         $talles = ProductTalle::where('activa', 1)->orderBy('nombre')->get();
         $colors = ProductColor::where('activa', 1)->orderBy('nombre')->get();
@@ -102,7 +102,7 @@ $sortOrder = $request->get('order', 'desc');
     public function createMultiple()
     {
         $type = "producto";
-        $categories = ProductCategory::where('activa', 1)->orderBy('nombre')->get();
+        $categories = ProductCategory::where('activa', 1)->orderBy('id')->get();
         $marcas = ProductMarca::where('activa', 1)->orderBy('nombre')->get();
         $talles = ProductTalle::where('activa', 1)->orderBy('nombre')->get();
         $colors = ProductColor::where('activa', 1)->orderBy('nombre')->get();
@@ -390,7 +390,7 @@ $sortOrder = $request->get('order', 'desc');
     {
         $type = "producto";
         $appkey = $this->generateKey();
-        $categories = ProductCategory::where('activa', 1)->orderBy('nombre')->get();
+        $categories = ProductCategory::where('activa', 1)->orderBy('id')->get();
         $talles = ProductTalle::where('activa', 1)->orderBy('nombre')->get();
         $colors = ProductColor::where('activa', 1)->orderBy('nombre')->get();
         $marcas = ProductMarca::where('activa', 1)->orderBy('nombre')->get();
