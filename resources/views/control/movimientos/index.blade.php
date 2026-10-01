@@ -190,6 +190,15 @@
                 <td>$ {{ $total_tarj }}</td>
             </tr>
             <tr
+                @if($total_marcaton == 0) 
+                    class="fila azulOscuro"
+                @else
+                    class="fila celeste"
+                @endif>
+                <td>Total en Tarjeta Marcaton</td>
+                <td>$ {{ $total_marcaton }}</td>
+            </tr>
+            <tr
                 @if($total_transf == 0) 
                     class="fila azulOscuro"
                 @else
@@ -218,13 +227,13 @@
             </tr>
 
             <tr
-                @if($total_efec + $total_tarj == 0) 
+                @if($total_efec + $total_tarj + $total_marcaton == 0) 
                     class="fila azulOscuro"
                 @else
                     class="fila azul"
                 @endif>
                 <td>TOTAL</td>
-                <td>$ {{ $total_efec + $total_tarj + $total_cheque + $total_transf + $total_mp }}</td>
+                <td>$ {{ $total_efec + $total_tarj + $total_marcaton + $total_cheque + $total_transf + $total_mp }}</td>
             </tr>
         </tbody>
     </table>

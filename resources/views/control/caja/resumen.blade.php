@@ -8,8 +8,9 @@
         return '$ ' . (substr($txt, -3) === ',00' ? substr($txt, 0, -3) : $txt);
     };
     $esAdmin = Auth::user()->role_id == 1;
-    $totalCobrado = $ingXprod_efec + $total_tarj + $total_transf + $total_mp + $total_cheque;
-    $totalGeneral = $total_efec + $total_tarj + $total_cheque + $total_transf + $total_mp;
+    $total_marcaton = $total_marcaton ?? 0; // cierres guardados antes de separar Marcaton
+    $totalCobrado = $ingXprod_efec + $total_tarj + $total_marcaton + $total_transf + $total_mp + $total_cheque;
+    $totalGeneral = $total_efec + $total_tarj + $total_marcaton + $total_cheque + $total_transf + $total_mp;
     $totalGastos  = $gastXprov + $gastXserv + $gastosVarios;
     $unidades     = array_sum(array_column($productos, 'cantidad'));
     $fApertura    = $apertura ? date('d/m/Y H:i', strtotime($apertura)) : '-';
@@ -143,6 +144,7 @@
                 @foreach ([
                     'Efectivo'       => $ingXprod_efec,
                     'Tarjetas'       => $total_tarj,
+                    'Tarjeta Marcaton' => $total_marcaton,
                     'Transferencias' => $total_transf,
                     'Mercado Pago'   => $total_mp,
                     'Cheques'        => $total_cheque,

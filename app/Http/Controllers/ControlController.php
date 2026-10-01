@@ -95,7 +95,7 @@ class ControlController extends Controller
             'cerrado_por'    => $resumen['cerrado_por'],
             'cant_ventas'    => $resumen['cant_ventas'],
             'total_efectivo' => $resumen['total_efec'],
-            'total_turno'    => $resumen['total_efec'] + $resumen['total_tarj'] + $resumen['total_cheque'] + $resumen['total_transf'] + $resumen['total_mp'],
+            'total_turno'    => $resumen['total_efec'] + $resumen['total_tarj'] + $resumen['total_marcaton'] + $resumen['total_cheque'] + $resumen['total_transf'] + $resumen['total_mp'],
             'resumen'        => $resumen,
         ]);
 
@@ -1345,8 +1345,11 @@ class ControlController extends Controller
                         ->value(\DB::raw("sum(monto)")) + 0;
         $ingXprod_efec = Order::where('deHoy', 1)
                         ->value(\DB::raw("sum(pago_efec)")) + 0;
-        $ingXprod_tarj = Order::where('deHoy', 1)
+        $ingXprod_tarj = Order::where('deHoy', 1)->where('id_forma_pago', '!=', 6)
                         ->value(\DB::raw("sum(pago_tarj)")) + 0;
+        // Banco Nacion Marcaton (id 6): se guarda en pago_tarj, o en pago_cheque si hubo fiado
+        $ingXprod_marcaton = Order::where('deHoy', 1)->where('id_forma_pago', 6)
+                        ->value(\DB::raw("sum(pago_tarj + pago_cheque)")) + 0;
 
         $ingXprod_transf = Order::where('deHoy', 1)->where('id_forma_pago', '!=', 24)
                         ->value(\DB::raw("sum(pago_transf)")) + 0;
@@ -1383,6 +1386,7 @@ class ControlController extends Controller
                         ->value(\DB::raw("sum(monto)")) + 0;
         $total_efec = $caja_inicial + $ingXprod_efec + $ingXpago_deudas - $gastosVarios - $gastXserv - $gastXprov - $retiros;
         $total_tarj = $ingXprod_tarj;
+        $total_marcaton = $ingXprod_marcaton;
 
         $total_transf = $ingXprod_transf;
         $total_mp = $ingXprod_mp;
@@ -1394,7 +1398,7 @@ class ControlController extends Controller
             'caja_inicial', 'ingXmercaderias', 'ganXmercaderias', 'ganXservicios',
             'ingXprod_efec', 'ingXprod_dolares', 'ingXpago_deudas', 'fiado', 'descuentos',
             'gastosVarios', 'gastXserv', 'gastXprov', 'retiros',
-            'total_efec', 'total_tarj', 'total_transf', 'total_mp', 'total_cheque', 'total_dolares'
+            'total_efec', 'total_tarj', 'total_marcaton', 'total_transf', 'total_mp', 'total_cheque', 'total_dolares'
         );
     }
 
@@ -1440,9 +1444,12 @@ class ControlController extends Controller
         $ingXprod_efec = Order::where('id_type', 1)
                         ->whereBetween('created_at', [$desde, $hasta])
                         ->value(\DB::raw("sum(pago_efec)")) + 0;
-        $ingXprod_tarj = Order::where('id_type', 1)
+        $ingXprod_tarj = Order::where('id_type', 1)->where('id_forma_pago', '!=', 6)
                         ->whereBetween('created_at', [$desde, $hasta])
                         ->value(\DB::raw("sum(pago_tarj)")) + 0;
+        $ingXprod_marcaton = Order::where('id_type', 1)->where('id_forma_pago', 6)
+                        ->whereBetween('created_at', [$desde, $hasta])
+                        ->value(\DB::raw("sum(pago_tarj + pago_cheque)")) + 0;
         $ingXpago_deudas = Deuda::where('tipo', 'P')
                         ->whereBetween('created_at', [$desde, $hasta])
                         ->value(\DB::raw("sum(monto)")) + 0;
@@ -1485,6 +1492,7 @@ class ControlController extends Controller
         
         $total_efec = $caja_inicial + $ingXprod_efec + $ingXpago_deudas - $gastosVarios - $gastXserv - $gastXprov - $retiros;
         $total_tarj = $ingXprod_tarj;
+        $total_marcaton = $ingXprod_marcaton;
                         
         $desde = date('d/m/y', strtotime($request->desde));
         $hasta = date('d/m/y', strtotime($request->hasta));
@@ -1512,6 +1520,7 @@ class ControlController extends Controller
             'retiros', 
             'total_efec', 
             'total_tarj',
+            'total_marcaton',
             'total_transf',
             'total_mp',
             'total_bn',
