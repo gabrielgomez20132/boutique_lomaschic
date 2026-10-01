@@ -403,7 +403,7 @@
                         <td>!{ subOrden.created_at | formatDate }!</td>
                         <td>!{ subOrden.created_at | formatTime }!</td>
                         <td>
-                            <img class="zoom" width="36px" v-bind:src="'/uploads/' + subOrden.archivo">
+                            <img class="zoom" width="36px" v-bind:src="'/storage/products/' + subOrden.archivo">
                         </td>
                         @if($order->completada != 1)
                             <td>

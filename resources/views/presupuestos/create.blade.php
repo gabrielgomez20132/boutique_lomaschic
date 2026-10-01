@@ -231,7 +231,7 @@
                         <td>!{ item.created_at | formatDate }!</td>
                         <td>!{ item.created_at | formatTime }!</td>
                         <td>
-                            <img class="zoom" width="36px" v-bind:src="'/uploads/' + item.archivo">
+                            <img class="zoom" width="36px" v-bind:src="'/storage/products/' + item.archivo">
                         </td>
                         @if($presupuesto->completada != 1)
                             <td>

@@ -296,7 +296,7 @@ $sortOrder = $request->get('order', 'desc');
                     $file = $request->file("variantes.{$index}.archivo");
                     $ext = $file->getClientOriginalExtension();
                     $filename = $variante['codigo'] . "." . $ext;
-                    Storage::disk('local')->put($filename, \File::get($file));
+                    $file->storeAs('products', $filename, 'public');
                 }
 
                 // Crear el producto
