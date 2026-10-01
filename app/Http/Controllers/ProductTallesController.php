@@ -15,7 +15,7 @@ class ProductTallesController extends Controller
      */
     public function index()
     {
-        $categories = ProductTalle::where('activa', 1)->orderBy('nombre')->get();
+        $categories = ProductTalle::where('activa', 1)->orderBy('id')->get();
         $type = "categoria";
         $activas = true;
         return view('talles.index', compact('categories','type','activas'));
@@ -116,7 +116,7 @@ class ProductTallesController extends Controller
 
     public function papelera()
     {
-        $categories = ProductTalle::where('activa', 0)->orderBy('nombre')->get();
+        $categories = ProductTalle::where('activa', 0)->orderBy('id')->get();
         $type = "categoria";
         $activas = false;
         return view('talles.index', compact('categories','type','activas'));

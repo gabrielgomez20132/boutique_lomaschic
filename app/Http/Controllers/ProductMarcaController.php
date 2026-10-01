@@ -14,7 +14,7 @@ class ProductMarcaController extends Controller
      */
     public function index()
     {
-        $marcas = ProductMarca::where('activa', 1)->orderBy('nombre')->get();
+        $marcas = ProductMarca::where('activa', 1)->orderBy('id')->get();
         $type = "marca";
         return view('marcas.index', compact('marcas','type'));
     }

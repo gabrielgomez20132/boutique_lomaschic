@@ -14,7 +14,7 @@ class ProductColorController extends Controller
      */
     public function index()
     {
-        $categories = ProductColor::where('activa', 1)->orderBy('nombre')->get();
+        $categories = ProductColor::where('activa', 1)->orderBy('id')->get();
         $type = "categoria";
         $activas = true;
         return view('colors.index', compact('categories','type','activas'));
@@ -115,7 +115,7 @@ class ProductColorController extends Controller
 
     public function papelera()
     {
-        $categories = ProductColor::where('activa', 0)->orderBy('nombre')->get();
+        $categories = ProductColor::where('activa', 0)->orderBy('id')->get();
         $type = "categoria";
         $activas = false;
         return view('colors.index', compact('categories','type','activas'));

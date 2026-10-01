@@ -25,9 +25,9 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $categories = ProductCategory::where('activa', 1)->orderBy('id')->get();
-        $talles = ProductTalle::where('activa', 1)->orderBy('nombre')->get();
-        $colors = ProductColor::where('activa', 1)->orderBy('nombre')->get();
-        $marcas = ProductMarca::where('activa', 1)->orderBy('nombre')->get();
+        $talles = ProductTalle::where('activa', 1)->orderBy('id')->get();
+        $colors = ProductColor::where('activa', 1)->orderBy('id')->get();
+        $marcas = ProductMarca::where('activa', 1)->orderBy('id')->get();
 
         // Obtener parámetros de ordenamiento desde la URL
         $sortBy = $request->get('sort', 'created_at'); // Por defecto ordenar por fecha de creación
@@ -53,9 +53,9 @@ class ProductController extends Controller
     {
         $categories = ProductCategory::where('activa', 1)->orderBy('id')->get();
 
-        $talles = ProductTalle::where('activa', 1)->orderBy('nombre')->get();
-        $colors = ProductColor::where('activa', 1)->orderBy('nombre')->get();
-        $marcas = ProductMarca::where('activa', 1)->orderBy('nombre')->get();
+        $talles = ProductTalle::where('activa', 1)->orderBy('id')->get();
+        $colors = ProductColor::where('activa', 1)->orderBy('id')->get();
+        $marcas = ProductMarca::where('activa', 1)->orderBy('id')->get();
 
         $sortBy = $request->get('sort', 'created_at');
 $sortOrder = $request->get('order', 'desc');
@@ -88,9 +88,9 @@ $sortOrder = $request->get('order', 'desc');
     {
         $type = "producto";
         $categories = ProductCategory::where('activa', 1)->orderBy('id')->get();
-        $marcas = ProductMarca::where('activa', 1)->orderBy('nombre')->get();
-        $talles = ProductTalle::where('activa', 1)->orderBy('nombre')->get();
-        $colors = ProductColor::where('activa', 1)->orderBy('nombre')->get();
+        $marcas = ProductMarca::where('activa', 1)->orderBy('id')->get();
+        $talles = ProductTalle::where('activa', 1)->orderBy('id')->get();
+        $colors = ProductColor::where('activa', 1)->orderBy('id')->get();
         return view('products.create', compact('categories', 'marcas', 'type', 'colors', 'talles' ));
     }
 
@@ -103,9 +103,9 @@ $sortOrder = $request->get('order', 'desc');
     {
         $type = "producto";
         $categories = ProductCategory::where('activa', 1)->orderBy('id')->get();
-        $marcas = ProductMarca::where('activa', 1)->orderBy('nombre')->get();
-        $talles = ProductTalle::where('activa', 1)->orderBy('nombre')->get();
-        $colors = ProductColor::where('activa', 1)->orderBy('nombre')->get();
+        $marcas = ProductMarca::where('activa', 1)->orderBy('id')->get();
+        $talles = ProductTalle::where('activa', 1)->orderBy('id')->get();
+        $colors = ProductColor::where('activa', 1)->orderBy('id')->get();
         return view('products.create-multiple', compact('categories', 'marcas', 'type', 'colors', 'talles' ));
     }
 
@@ -391,9 +391,9 @@ $sortOrder = $request->get('order', 'desc');
         $type = "producto";
         $appkey = $this->generateKey();
         $categories = ProductCategory::where('activa', 1)->orderBy('id')->get();
-        $talles = ProductTalle::where('activa', 1)->orderBy('nombre')->get();
-        $colors = ProductColor::where('activa', 1)->orderBy('nombre')->get();
-        $marcas = ProductMarca::where('activa', 1)->orderBy('nombre')->get();
+        $talles = ProductTalle::where('activa', 1)->orderBy('id')->get();
+        $colors = ProductColor::where('activa', 1)->orderBy('id')->get();
+        $marcas = ProductMarca::where('activa', 1)->orderBy('id')->get();
 
         $product = Product::find($id);
         return view('products.edit', compact('product', 'categories', 'type', 'appkey', 'colors', 'talles', 'marcas'));
