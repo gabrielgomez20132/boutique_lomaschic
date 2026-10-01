@@ -13,6 +13,7 @@ use App\Product;
 use App\FormaPago;
 use App\Vale;
 use App\OrderVale;
+use App\CierreCaja;
 use Illuminate\Support\Facades\Auth;
 
 class ControlController extends Controller
@@ -51,6 +52,54 @@ class ControlController extends Controller
 
     public function cierre()
     {
+        $caja_abierta = \DB::table('controls')->where('caja_abierta', 1)->exists();
+        if (!$caja_abierta) {
+            return redirect()->route('control.caja.inicio');
+        }
+
+        // --- Resumen del turno (antes de cerrar) ---
+        $resumen = $this->datosTurno();
+
+        $resumen['apertura'] = Control::where('id_desc', 1)->where('caja_abierta', 1)->min('created_at');
+        $resumen['cierre'] = now()->toDateTimeString();
+        $resumen['cerrado_por'] = Auth::user()->nombre ?? '';
+
+        $resumen['cant_ventas'] = Order::where('deHoy', 1)->where('completada', 1)->count();
+
+        $resumen['productos'] = \DB::table('orders')
+            ->join('orders_products', 'orders_products.id_order', '=', 'orders.id')
+            ->join('products', 'products.id', '=', 'orders_products.id_producto')
+            ->leftJoin('product_talles', 'product_talles.id', '=', 'products.id_talle')
+            ->leftJoin('product_colors', 'product_colors.id', '=', 'products.id_color')
+            ->where('orders.deHoy', 1)->where('orders.completada', 1)
+            ->groupBy('products.id', 'products.nombre', 'product_talles.nombre', 'product_colors.nombre')
+            ->orderByRaw('SUM(orders_products.cantidad) DESC')
+            ->select(
+                'products.nombre',
+                'product_talles.nombre as talle',
+                'product_colors.nombre as color',
+                \DB::raw('SUM(orders_products.cantidad) as cantidad'),
+                \DB::raw('SUM(orders_products.monto * orders_products.cantidad) as total')
+            )
+            ->get()
+            ->map(function ($p) { return (array) $p; })
+            ->all();
+
+        $pendientes = Order::where('deHoy', 1)->where('completada', 0)->where('monto', '>', 0);
+        $resumen['pendientes_cant'] = (clone $pendientes)->count();
+        $resumen['pendientes_monto'] = (clone $pendientes)->sum('monto') + 0;
+
+        $cierreCaja = CierreCaja::create([
+            'apertura'       => $resumen['apertura'],
+            'cierre'         => $resumen['cierre'],
+            'cerrado_por'    => $resumen['cerrado_por'],
+            'cant_ventas'    => $resumen['cant_ventas'],
+            'total_efectivo' => $resumen['total_efec'],
+            'total_turno'    => $resumen['total_efec'] + $resumen['total_tarj'] + $resumen['total_cheque'] + $resumen['total_transf'] + $resumen['total_mp'],
+            'resumen'        => $resumen,
+        ]);
+
+        // --- Cierre ---
         \DB::table('controls')
             ->where('caja_abierta', 1)
             ->update(['caja_abierta' => 0]);
@@ -63,7 +112,25 @@ class ControlController extends Controller
         ->where('deHoy', 1)
         ->update(['deHoy' => 0]);
 
-        return redirect()->route('control.caja.inicio');
+        return redirect()->route('control.caja.cierres.show', $cierreCaja->id);
+    }
+
+    public function cierres()
+    {
+        $cierres = CierreCaja::orderBy('cierre', 'DESC')->paginate(20);
+        $titulo = "Cierres de Caja";
+
+        return view('control.caja.cierres', compact('cierres', 'titulo'));
+    }
+
+    public function verCierre($id)
+    {
+        $cierreCaja = CierreCaja::findOrFail($id);
+
+        $datos = $cierreCaja->resumen;
+        $datos['id_cierre'] = $cierreCaja->id;
+
+        return view('control.caja.resumen', $datos);
     }
 
     public function retiros()
@@ -1244,7 +1311,11 @@ class ControlController extends Controller
         return redirect()->back();
     }
 
-    public function movimientos()
+    /**
+     * Calcula los totales del turno abierto (deHoy = 1 / caja_abierta = 1).
+     * Lo usan Movimientos y el Resumen de cierre, asi los numeros coinciden.
+     */
+    private function datosTurno()
     {
         $caja_inicial = Control::where('id_desc', 1)
                         ->where('caja_abierta', 1)
@@ -1319,28 +1390,20 @@ class ControlController extends Controller
         $total_cheque = $ingXprod_cheque;
         $total_dolares = $ingXprod_dolares;
         
-        $titulo = "Movimientos del turno";
-        
-        return view('control.movimientos.index', compact(
-            'titulo', 
-            'caja_inicial', 
-            'ingXmercaderias', 
-            'ganXmercaderias', 
-            'ganXservicios', 
-            'ingXpago_deudas', 
-            'fiado',
-            'descuentos',
-            'gastosVarios', 
-            'gastXserv', 
-            'gastXprov', 
-            'retiros', 
-            'total_efec', 
-            'total_tarj',
-            'total_transf',
-            'total_mp',
-            'total_cheque',
-            'total_dolares'
-        ));
+        return compact(
+            'caja_inicial', 'ingXmercaderias', 'ganXmercaderias', 'ganXservicios',
+            'ingXprod_efec', 'ingXprod_dolares', 'ingXpago_deudas', 'fiado', 'descuentos',
+            'gastosVarios', 'gastXserv', 'gastXprov', 'retiros',
+            'total_efec', 'total_tarj', 'total_transf', 'total_mp', 'total_cheque', 'total_dolares'
+        );
+    }
+
+    public function movimientos()
+    {
+        $datos = $this->datosTurno();
+        $datos['titulo'] = "Movimientos del turno";
+
+        return view('control.movimientos.index', $datos);
     }
 
     public function historial_movimientos(Request $request)

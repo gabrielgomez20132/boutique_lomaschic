@@ -24,6 +24,10 @@
                             <li>
                                 <a href="/admin/control/caja/retiros">Retiros</a>
                             </li>
+
+                            <li>
+                                <a href="/admin/control/caja/cierres">Cierres de Caja</a>
+                            </li>
                         </ul>
                     </li>
                     <li>

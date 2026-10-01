@@ -235,6 +235,8 @@ Route::group(['middleware' => 'is_admin'], function ()
     // Agregado Fabian
 
     Route::get('/admin/control/caja/cierre/', 'ControlController@cierre')->name('control.caja.cierre');
+    Route::get('/admin/control/caja/cierres', 'ControlController@cierres')->name('control.caja.cierres');
+    Route::get('/admin/control/caja/cierres/{id}', 'ControlController@verCierre')->name('control.caja.cierres.show');
 
     Route::post('/admin/control/', 'ControlController@store');
     
