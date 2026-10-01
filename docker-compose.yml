@@ -13,6 +13,7 @@ services:
     networks:
       - lomaschic_net
       - proxy-network
+      - mysql-network
 
   lomaschic_nginx:
     image: nginx:latest
@@ -34,3 +35,7 @@ networks:
   proxy-network:
     external: true
     name: nginx-proxy_proxy-network
+
+  mysql-network:
+    external: true
+    name: mysql_default
