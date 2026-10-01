@@ -1,0 +1,36 @@
+services:
+
+  lomaschic_app:
+    build:
+      context: .
+    container_name: lomaschic_app
+    restart: always
+    working_dir: /var/www/proyectos_laravel/lomaschic
+    volumes:
+      - ./:/var/www/proyectos_laravel/lomaschic
+    expose:
+      - "9000"
+    networks:
+      - lomaschic_net
+      - proxy-network
+
+  lomaschic_nginx:
+    image: nginx:latest
+    container_name: lomaschic_nginx
+    restart: always
+    volumes:
+      - ./:/var/www/proyectos_laravel/lomaschic
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - lomaschic_app
+    networks:
+      - lomaschic_net
+      - proxy-network
+
+networks:
+  lomaschic_net:
+    driver: bridge
+
+  proxy-network:
+    external: true
+    name: nginx-proxy_proxy-network

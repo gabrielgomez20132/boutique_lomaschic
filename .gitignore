@@ -1,0 +1,44 @@
+/vendor/
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Laravel 4 specific
+bootstrap/compiled.php
+app/storage/
+
+# Laravel 5 & Lumen specific
+public/storage
+public/hot
+public/uploads
+
+# Laravel 5 & Lumen specific with changed public path
+public_html/storage
+public_html/hot
+
+storage/*.key
+.env
+Homestead.yaml
+Homestead.json
+/.vagrant
+.phpunit.result.cache
+
+public/uploads
+
+# --- Produccion / secretos ---
+.env.*
+!.env.example
+!.env.production.example
+/.vscode/
+/.docker/
+
+# AFIP: claves privadas y tokens (se copian a mano al server)
+app/Classes/keys/*.key
+app/Classes/keys/*.zip
+app/Classes/keys/certificados.txt
+app/Classes/xml/TA.xml
+
+# Backups
+*.sql
+*.sql.gz
+FILES_*.tar.gz

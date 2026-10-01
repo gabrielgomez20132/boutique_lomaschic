@@ -1,0 +1,44 @@
+.logo{
+    width: 50%; 
+    display: block; 
+    margin-left: auto; 
+    margin-right: auto; 
+    padding: 20pt;
+}
+.contenedor{
+    max-width: 410px;
+    min-width: 410px;
+    zoom: 61%;
+}
+.pad15{
+    padding-left: 15px; 
+    padding-right: 15px;
+}
+.padT10{
+    padding-top: 10px;
+}
+.mw50{
+    max-width: 50%;
+}
+.mw100{
+    max-width: 100%;
+}
+.margTB{
+    margin-top: 10pt; 
+    margin-bottom: 10pt;
+}
+.flex41{
+    flex: 41.667%
+}
+.flex16{
+    flex: 16.667%
+}
+.tableFixHead { overflow-y: auto; height: 355px; margin-bottom: 15px;}
+.tableFixHead thead th { position: sticky; top: -1px; background:#337ab7; color: white; z-index: 1;}
+
+.botonDerechaInline {
+    margin-top: 22px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    height: fit-content;
+}
