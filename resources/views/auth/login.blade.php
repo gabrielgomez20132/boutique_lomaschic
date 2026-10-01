@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'LoMasChic') }}</title>
+    <title>LoMásChic</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=caja">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
@@ -123,7 +123,7 @@
     <div class="login-wrap">
         <div class="login-card">
             <div class="login-mark">L</div>
-            <h1>{{ config('app.name', 'LoMasChic') }}</h1>
+            <h1>LoMásChic</h1>
             <p class="login-sub">Ingresá para continuar</p>
 
             <form method="POST" action="{{ route('login') }}">
@@ -155,7 +155,7 @@
                 <button class="btn btn-block btn-enter" type="submit">Entrar</button>
             </form>
 
-            <p class="login-copy">&copy; {{ date('Y') }} {{ config('app.name', 'LoMasChic') }}</p>
+            <p class="login-copy">2026 powerby SyncodeIT</p>
         </div>
     </div>
 </body>
