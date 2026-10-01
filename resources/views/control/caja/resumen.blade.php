@@ -88,7 +88,7 @@
         </div>
         <div class="rc-actions">
             <button type="button" class="btn btn-primary" onclick="window.print()">
-                <span class="oi oi-print"></span> Imprimir
+                Imprimir
             </button>
             <a href="{{ route('control.caja.cierres') }}" class="btn btn-default">Ver cierres</a>
             <a href="{{ route('control.caja.inicio') }}" class="btn btn-default">Ir a Caja</a>

@@ -24,11 +24,12 @@
     .cc-table .r { text-align: right; }
     .cc-table .c { text-align: center; }
     .cc-fecha { font-weight: 600; }
-    .cc-hora { color: var(--suave); font-size: 13px; }
+    .cc-hora { color: var(--suave); font-size: 14px; white-space: nowrap; }
+    .cc-hora small { white-space: nowrap; }
     .cc-num { color: var(--suave); }
     .cc-efec { font-weight: 700; }
     .cc-acc { white-space: nowrap; text-align: right; }
-    .cc-acc .btn { padding: 5px 10px; }
+    .cc-acc .btn { padding: 6px 12px; font-size: 14px; margin-left: 4px; }
     .cc-empty { padding: 30px 16px; text-align:center; color: var(--suave); }
     .cc-pag { margin-top: 14px; }
 </style>
@@ -74,10 +75,10 @@
                             <td class="r">{{ $m($c->total_turno) }}</td>
                             <td class="cc-acc">
                                 <a href="{{ route('control.caja.cierres.show', $c->id) }}" class="btn btn-success" title="Ver">
-                                    <span class="oi oi-eye"></span>
+                                    <span class="oi oi-eye"></span> Ver
                                 </a>
                                 <a href="{{ route('control.caja.cierres.show', $c->id) }}?imprimir=1" target="_blank" class="btn btn-primary" title="Imprimir">
-                                    <span class="oi oi-print"></span>
+                                    Imprimir
                                 </a>
                             </td>
                         </tr>
