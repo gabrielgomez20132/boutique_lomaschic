@@ -28,24 +28,16 @@
                         COMPROBANTE DE DEVOLUCIÓN
                     </p>
                 </div>
-                <div>
-                    <img class="logo" src="/oregonlogo.png" style="width: 90%; padding: 0pt; height:300px;">
+                <div class="text-center">
+                    <img class="logo" src="/logo-lomaschic.jpg" alt="Lo Más Chic" style="width: 180px; height: auto; padding: 0;">
                 </div>
                 <p>
                     <address class="text-center" style="font-size:13px;font-weight:bolder;">
-                        Oregon Jeans
+                        Lo Más Chic
                         <br>
-                        San Martín N° 80. Frias - Sgo. del Estero- Argentina.
+                        Rivadavia 1063
                         <br>
                         Presentar comprobante para cambio o reclamo.
-                        <br>
-                        Seguinos en nuestras redes:
-                        <br>
-                        Facebook: Modo Oregon
-                        <br>
-                        Instagram: Modo Oregon
-                        <br>
-                        WhatsApp: 3854424727
                     </address>
                 </p>
                 <hr>

@@ -74,7 +74,7 @@
             <tr>
                 <th scope="row">{{ $control->id }}</th>
                 <td>{{ $control->admin }}</td>
-                <td><b>$</b> {{ $control->monto }}</td>
+                <td><b>$</b> {{ number_format($control->monto, 0, ',', '.') }}</td>
                 <td>{{ $control->created_at->format('d/m/Y') }}</td>
                 <td>{{ $control->created_at->format('H:i') }} <b>hs</b></td>
                 <td style="display: flex;">
