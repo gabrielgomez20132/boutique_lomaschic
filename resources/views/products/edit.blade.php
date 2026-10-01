@@ -121,7 +121,7 @@
                 </div>
 
                 <div class="form-group col-md-2">
-                    <label>&nbsp;</label>
+                    <label style="display: block;">&nbsp;</label>
                     <button type="submit" class="btn btn-success" style="white-space: nowrap;">
                         <span class="oi oi-check" style="display: inline-block; top: 2px;"></span> Guardar
                     </button>
