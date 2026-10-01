@@ -1,5 +1,10 @@
 FROM php:7.4-fpm
 
+# Debian 11 (bullseye) quedo sin soporte: el repo de seguridad devuelve 404.
+# Se quita bullseye-security y se instala desde el repo principal.
+RUN sed -i '/bullseye-security/d' /etc/apt/sources.list 2>/dev/null || true; \
+    rm -f /etc/apt/sources.list.d/*security* 2>/dev/null || true
+
 # Instalar dependencias
 RUN apt-get update && apt-get install -y \
     git unzip libpng-dev libonig-dev libxml2-dev zip curl \
