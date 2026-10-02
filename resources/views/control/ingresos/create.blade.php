@@ -57,6 +57,13 @@
                 </button>
             </div>
         @endif
+            @if($errors->any())
+                <div class="alert alert-danger" style="font-size: 16px;">
+                    @foreach($errors->all() as $err)
+                        <div><b>{{ $err }}</b></div>
+                    @endforeach
+                </div>
+            @endif
             <div style="display: flex;">
                 <div>
                     <h1 style="margin-top: auto;">{{ $titulo }}</h1>

@@ -56,7 +56,25 @@
                                         </td>
                                         <td>
                                             @if($devolucion->vale)
-                                                <span class="label label-success">{{ $devolucion->vale->codigo_vale }}</span>
+                                                @php
+                                                    $v = $devolucion->vale;
+                                                    $saldo = (float) $v->monto_disponible;
+                                                    if ($saldo <= 0 || !$v->activo) {
+                                                        $vClase = 'label-danger';  $vEstado = 'USADO';
+                                                    } elseif ($v->isVencido()) {
+                                                        $vClase = 'label-default'; $vEstado = 'VENCIDO';
+                                                    } elseif ((float) $v->monto_usado > 0) {
+                                                        $vClase = 'label-warning'; $vEstado = 'Saldo $ ' . number_format($saldo, 0, ',', '.');
+                                                    } else {
+                                                        $vClase = 'label-success'; $vEstado = 'DISPONIBLE';
+                                                    }
+                                                @endphp
+                                                <span class="label {{ $vClase }}"
+                                                      title="Usado: $ {{ number_format($v->monto_usado, 0, ',', '.') }} · Disponible: $ {{ number_format($saldo, 0, ',', '.') }} · Vence: {{ \Carbon\Carbon::parse($v->fecha_vencimiento)->format('d/m/Y') }}"
+                                                      @if($vEstado == 'USADO') style="text-decoration: line-through;" @endif>
+                                                    {{ $v->codigo_vale }}
+                                                </span>
+                                                <br><small class="text-muted" style="font-weight:600;">{{ $vEstado }}</small>
                                             @else
                                                 <span class="text-muted">N/A</span>
                                             @endif

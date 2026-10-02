@@ -401,6 +401,17 @@ window.onload = function () {
                 this.getFdPago();
             },
             watch: {
+                // Si ya hay un vale elegido/encontrado, recalcular cuanto se usa cuando cambia el total
+                // (por ej. si se busco el vale antes de cargar los productos)
+                totalSuma: function(nuevoTotal) {
+                    var vale = this.valeEncontrado;
+                    if (!vale && this.valeElegido) {
+                        vale = this.valesDisponibles.find(v => v.id == this.valeElegido);
+                    }
+                    if (vale) {
+                        this.montoVale = Math.min(parseFloat(vale.monto_disponible), nuevoTotal);
+                    }
+                },
                 clienteElegido: function(newClienteId) {
                     if (newClienteId && newClienteId !== 2) {
                         this.getValesCliente(newClienteId);

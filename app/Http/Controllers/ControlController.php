@@ -485,6 +485,28 @@ class ControlController extends Controller
         $order = Order::find($id_order);
         $monto = $order->monto;
 
+        // Validar el vale ANTES de cobrar (si falla despues, la venta quedaria cobrada sin descontar el vale)
+        if ($request->has('id_vale') && $request->id_vale) {
+            $valeCheck = Vale::find($request->id_vale);
+            $montoValeCheck = (float) ($request->pago_vale ?? 0);
+
+            if (!$valeCheck) {
+                return back()->withErrors(['error' => 'El vale seleccionado no existe.']);
+            }
+            if (!$valeCheck->activo) {
+                return back()->withErrors(['error' => 'El vale ya no está activo.']);
+            }
+            if ($valeCheck->isVencido()) {
+                return back()->withErrors(['error' => 'El vale está vencido.']);
+            }
+            if ($montoValeCheck <= 0) {
+                return back()->withErrors(['error' => 'El monto del vale debe ser mayor a cero.']);
+            }
+            if ($montoValeCheck > (float) $valeCheck->monto_disponible) {
+                return back()->withErrors(['error' => 'El vale no tiene saldo suficiente. Disponible: $' . number_format($valeCheck->monto_disponible, 0, ',', '.')]);
+            }
+        }
+
         // Recargo (% ADIC): se suma al monto de la orden antes de calcular los pagos.
         // Es idempotente: si se reenvia el cobro, reemplaza el recargo anterior en vez de sumarlo de nuevo.
         if (!$order->completada) {
