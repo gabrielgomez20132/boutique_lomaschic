@@ -1,1 +1,1 @@
-# control-soft
+# Control STOCK - Boutique LoMasChic
