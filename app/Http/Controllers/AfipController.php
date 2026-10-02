@@ -450,6 +450,7 @@ class AfipController extends Controller
         
         return view('afip.generador', compact(
             'orders_products',
+            'idOrder',
             'descuento',
             'impTotal',
             'cbteFch',

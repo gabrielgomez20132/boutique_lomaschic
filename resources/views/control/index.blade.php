@@ -88,6 +88,12 @@
                             Movimientos
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('devoluciones.index') }}">
+                            <span class="oi oi-action-undo"></span>
+                            Devoluciones
+                        </a>
+                    </li>
                     @endif
                 </ul>
             </div>

@@ -1,6 +1,6 @@
-@extends('admin')
+@extends('control.index')
 
-@section('content2')
+@section('content3')
 <div id="app-devolucion">
     <div class="d-flex justify-content-between align-items-end">
         <h1 class="mt-2 mb-3">Nueva Devolución</h1>
@@ -60,11 +60,29 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6" v-if="ordenCargada">
+                            <div class="col-md-2" v-if="ordenCargada">
                                 <div class="form-group">
                                     <label>Cliente</label>
                                     <p class="form-control-static">
                                         <strong v-text="ordenDetalle.cliente ? ordenDetalle.cliente.nombre : 'Cliente General'"></strong>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2" v-if="ordenCargada">
+                                <div class="form-group">
+                                    <label>Fecha</label>
+                                    <p class="form-control-static">
+                                        <strong v-text="fechaOrden"></strong>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2" v-if="ordenCargada">
+                                <div class="form-group">
+                                    <label>Forma de pago</label>
+                                    <p class="form-control-static">
+                                        <strong v-text="ordenDetalle.forma_pago_nombre || '-'"></strong>
                                     </p>
                                 </div>
                             </div>
@@ -217,6 +235,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     cantidad_devuelta: p.cantidadDevolver,
                     precio_unitario: p.precio
                 }));
+        },
+        fechaOrden: function() {
+            if (!this.ordenDetalle || !this.ordenDetalle.created_at) return '';
+            var f = new Date(this.ordenDetalle.created_at);
+            if (isNaN(f)) return this.ordenDetalle.created_at;
+            var dd = ('0' + f.getDate()).slice(-2), mm = ('0' + (f.getMonth() + 1)).slice(-2);
+            var hh = ('0' + f.getHours()).slice(-2), mi = ('0' + f.getMinutes()).slice(-2);
+            return dd + '/' + mm + '/' + f.getFullYear() + ' ' + hh + ':' + mi + ' hs';
         },
         puedeGuardar: function() {
             return this.productosParaEnviar.length > 0 && this.totalDevolucion > 0;

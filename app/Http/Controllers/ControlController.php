@@ -485,6 +485,21 @@ class ControlController extends Controller
         $order = Order::find($id_order);
         $monto = $order->monto;
 
+        // Recargo (% ADIC): se suma al monto de la orden antes de calcular los pagos.
+        // Es idempotente: si se reenvia el cobro, reemplaza el recargo anterior en vez de sumarlo de nuevo.
+        if (!$order->completada) {
+            $recargo = max(0, round((float) ($request->recargo ?? 0), 2));
+            $montoBase = $order->monto - (float) ($order->recargo ?? 0);
+            $monto = $montoBase + $recargo;
+
+            \DB::table('orders')->where('id', $id_order)->update([
+                'monto'   => $monto,
+                'recargo' => $recargo,
+            ]);
+            $order->monto = $monto;
+            $order->recargo = $recargo;
+        }
+
         if ($id_forma_pago == 1) 
         {
             if ($descuento == null) {

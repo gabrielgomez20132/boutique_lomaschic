@@ -71,6 +71,8 @@ class DevolucionController extends Controller
             return response()->json(['error' => 'Orden no encontrada'], 404);
         }
 
+        $order->forma_pago_nombre = DB::table('formas_pago')->where('id', $order->id_forma_pago)->value('nombre');
+
         return response()->json($order);
     }
 
@@ -119,9 +121,24 @@ class DevolucionController extends Controller
                     return back()->withErrors(['error' => 'Producto no encontrado en la orden original.'])->withInput();
                 }
 
-                if ($prod['cantidad_devuelta'] > $order_product->cantidad) {
+                $cantidad_vendida = OrderProduct::where('id_order', $order->id)
+                    ->where('id_producto', $prod['id_producto'])
+                    ->sum('cantidad');
+
+                $ya_devuelta = DevolucionProducto::join('devoluciones', 'devoluciones.id', '=', 'devolucion_productos.id_devolucion')
+                    ->where('devoluciones.id_order_original', $order->id)
+                    ->where('devolucion_productos.id_producto', $prod['id_producto'])
+                    ->sum('devolucion_productos.cantidad_devuelta');
+
+                if ($prod['cantidad_devuelta'] <= 0) {
                     DB::rollBack();
-                    return back()->withErrors(['error' => 'La cantidad a devolver no puede ser mayor a la cantidad original.'])->withInput();
+                    return back()->withErrors(['error' => 'La cantidad a devolver debe ser mayor a cero.'])->withInput();
+                }
+
+                if ($prod['cantidad_devuelta'] + $ya_devuelta > $cantidad_vendida) {
+                    DB::rollBack();
+                    $disponible = max(0, $cantidad_vendida - $ya_devuelta);
+                    return back()->withErrors(['error' => 'No se puede devolver más de lo vendido. De este producto quedan ' . $disponible . ' unidad(es) para devolver en esta venta.'])->withInput();
                 }
 
                 $subtotal = $prod['cantidad_devuelta'] * $prod['precio_unitario'];
@@ -174,8 +191,11 @@ class DevolucionController extends Controller
 
             DB::commit();
 
-            // Redirigir al ticket para imprimir automáticamente
-            return redirect()->route('devoluciones.ticket', $devolucion->id);
+            // Volver al detalle de la devolucion (dentro del sistema);
+            // el ticket del vale se abre solo en una ventana aparte.
+            return redirect()->route('devoluciones.show', $devolucion->id)
+                ->with('success', 'Devolución registrada. Se generó el vale ' . $vale->codigo_vale . '.')
+                ->with('imprimir_ticket', true);
 
         } catch (\Exception $e) {
             DB::rollBack();

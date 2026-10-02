@@ -1,6 +1,6 @@
-@extends('admin')
+@extends('control.index')
 
-@section('content2')
+@section('content3')
     <div class="d-flex justify-content-between align-items-end">
         <h1 class="mt-2 mb-3">Detalle de Devolución #{{ $devolucion->id }}</h1>
         <p>
@@ -167,7 +167,7 @@
                         <a href="{{ route('devoluciones.index') }}" class="btn btn-default">
                             <i class="glyphicon glyphicon-arrow-left"></i> Volver al Listado
                         </a>
-                        <a href="{{ route('devoluciones.ticket', $devolucion->id) }}" class="btn btn-success" target="_blank">
+                        <a id="btnTicketVale" href="{{ route('devoluciones.ticket', $devolucion->id) }}" class="btn btn-success" target="print_popup" onclick="window.open(this.href,this.target,'width=650,height=650');return false;">
                             <i class="glyphicon glyphicon-print"></i> Imprimir Vale
                         </a>
                     </div>
@@ -181,4 +181,14 @@
     }
 }
 </style>
+    @if(session('imprimir_ticket'))
+        <script>
+            window.addEventListener('load', function () {
+                var link = document.getElementById('btnTicketVale');
+                if (link) {
+                    window.open(link.href, link.target, 'width=650,height=650');
+                }
+            });
+        </script>
+    @endif
 @endsection

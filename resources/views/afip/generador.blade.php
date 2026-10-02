@@ -83,6 +83,10 @@
 						</div>
 						<div class="flex41 text-right pad15">
 							<address style="font-size:13pt;margin-right: 5px;">
+								@if (!isset($caenum) && isset($idOrder))
+									<strong style="font-size:16pt;">Venta Nº {{ $idOrder }}</strong>
+									<p>
+								@endif
 								<strong>Fecha: </strong>{{ date("d/m/y", strtotime($cbteFch)) }}
 								<p>
 								<strong>Hora: </strong>{{ date("H:i", strtotime($cbteFch)) }} hs

@@ -123,7 +123,26 @@
             </div>
         </div>
     </div>
+    <div class="no-print" style="text-align:center; margin: 20px 0;">
+        <button type="button" onclick="volverAlSistema()" style="font-size:14pt; padding:8px 20px; cursor:pointer;">
+            Cerrar / Volver al sistema
+        </button>
+    </div>
+    <style>@media print { .no-print { display: none !important; } }</style>
     <script>
+        function volverAlSistema() {
+            if (window.opener && !window.opener.closed) {
+                window.close();
+            } else {
+                window.location.href = "{{ route('devoluciones.show', $devolucion->id) }}";
+            }
+        }
+        window.onafterprint = function () {
+            // Si se abrio como ventana aparte, se cierra sola al terminar de imprimir
+            if (window.opener && !window.opener.closed) {
+                window.close();
+            }
+        };
         window.onload = function() {
             window.print();
         }

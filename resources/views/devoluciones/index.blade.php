@@ -1,6 +1,6 @@
-@extends('admin')
+@extends('control.index')
 
-@section('content2')
+@section('content3')
     <div class="d-flex justify-content-between align-items-end">
         <h1 class="mt-2 mb-3">Devoluciones</h1>
         <p>

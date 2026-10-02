@@ -44,6 +44,8 @@ window.onload = function () {
                     descuento: null,
                     perc_desc: null,
                     dec_desc: null,
+                    perc_adic: null,
+                    recargo: 0,
                     total: null,
                     subOrdenes: [],
                     products: [],
@@ -216,6 +218,8 @@ window.onload = function () {
                     this.descuento = null;
                     this.perc_desc = null;
                     this.dec_desc = null;
+                    this.perc_adic = null;
+                    this.recargo = 0;
 
                 },
                 getValesCliente: function (idCliente) {
@@ -304,7 +308,11 @@ window.onload = function () {
                     if (this.descuento > total) {
                         this.descuento = total;
                     }
-                    return total - this.descuento;
+                    // Recargo (% ADIC) sobre el total ya descontado
+                    let neto = total - this.descuento;
+                    let perc_adic = parseFloat(this.perc_adic);
+                    this.recargo = (neto > 0 && !isNaN(perc_adic) && perc_adic > 0) ? Math.ceil((perc_adic * neto) / 100) : 0;
+                    return neto + this.recargo;
                 },
                 vuelto: function () {
                     vuelto = this.pagoCon - this.totalSuma;

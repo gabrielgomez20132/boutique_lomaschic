@@ -19,6 +19,7 @@ class Order extends Model
         'pago_vale',
         'monto',
         'descuento',
+        'recargo',
         'completada',
         'deHoy',
         'id_deuda',

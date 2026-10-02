@@ -18,6 +18,11 @@
         opacity: 1; /* Firefox */
     }
 
+    input.input-adic::placeholder {
+        color: #1f6fd1;
+        opacity: 1;
+    }
+
     .autocomplete-results {
         position: absolute;
         z-index: 1000;
@@ -60,21 +65,25 @@
                     <div style="margin-left: auto; margin-top: 3px;">
                         @if($order->completada == 1)
                             @if($order->fiado != 0)
-                                <label class="btn btn-danger">FIADO ${{ $order->fiado }}</label>
+                                <label class="btn btn-danger">FIADO $ {{ number_format($order->fiado, 0, ',', '.') }}</label>
                             @endif
                             
                             @if($order->descuento > 0)
-                                <label class="btn btn-danger">DESC. ${{ $order->descuento }}</label>
+                                <label class="btn btn-danger">DESC. $ {{ number_format($order->descuento, 0, ',', '.') }}</label>
+                            @endif
+
+                            @if(($order->recargo ?? 0) > 0)
+                                <label class="btn btn-primary">ADIC. $ {{ number_format($order->recargo, 0, ',', '.') }}</label>
                             @endif
                             
                             @if ($order->id_forma_pago != 4)
-                                <label class="btn btn-success">PAGADO ${{ $order->pago_efec + $order->pago_tarj + $order->pago_transf + $order->pago_cheque + $order->pago_dolares + $order->pago_vale }}</label>
+                                <label class="btn btn-success">PAGADO $ {{ number_format($order->pago_efec + $order->pago_tarj + $order->pago_transf + $order->pago_cheque + $order->pago_dolares + $order->pago_vale, 0, ',', '.') }}</label>
                             @endif
                         @else
-                            <button class="btn btn-success">TOTAL $ !{ totalSuma }!</button>
+                            <button class="btn btn-success">TOTAL $ !{ Number(totalSuma).toLocaleString('es-AR', { maximumFractionDigits: 2 }) }!</button>
                             <template v-if="fdpagoElegida != 4">
                                 <input v-if="totalSuma > 0" class="btn btn-default" v-on:click="resetPagocon()" placeholder="$PAGO" min="0" v-model="pagoCon" type="number" style="width: 120px;">
-                                <button v-if="vuelto > 0" class="btn btn-primary">VUELTO $ !{ vuelto }!</button>   
+                                <button v-if="vuelto > 0" class="btn btn-primary">VUELTO $ !{ Number(vuelto).toLocaleString('es-AR', { maximumFractionDigits: 2 }) }!</button>   
                             </template>
                         @endif
                     </div>
@@ -110,6 +119,21 @@
                     @endif
                 </div>
             </div>
+            @if($order->completada != 1)
+            {{-- Recargo (% ADIC), justo debajo de % DESC --}}
+            <div style="display: flex;">
+                <div style="margin-left: auto; margin-top: 3px;width:450px;"></div>
+                <div style="margin-left: auto; margin-top: 6px;">
+                    <div v-if="(totalSuma > 0 || recargo > 0)" class="input-group" style="width: 120px;">
+                        <div class="input-group-addon" style="font-size: 20px;color: white;background-color: #1f6fd1;">%</div>
+                        <input placeholder="ADIC" type="text" class="form-control input-adic" v-model="perc_adic" style="color: #1f6fd1; font-weight: bold; padding: 1px; font-size: 20px;text-align: center;" oninput="this.value = this.value.replace(/\D+/g, '')">
+                    </div>
+                </div>
+                <div style="margin-left: auto; margin-top: 6px;">
+                    <div style="width: 120px;"></div>
+                </div>
+            </div>
+            @endif
         @if($order->completada == 1)
             <p>
                 <h4 class="mt-2 mb-3">{{ $subtitulo }}</h4>
@@ -263,6 +287,7 @@
                             </template>
 
                             <input name="descuento" type="hidden" v-bind:value="this.descuento">
+                            <input name="recargo" type="hidden" v-bind:value="this.recargo">
 
                         </form>
                     </div>
