@@ -56,11 +56,13 @@
                                     @if($category->activa == 1)
                                         <div style="display: flex; gap: 5px;">
                                             <a href="{{ route('talles.edit', $category) }}" class="btn btn-primary btn-sm">Editar</a>
+                                            {{-- Borrar talle deshabilitado: si un producto usa el talle, rompe el listado de Productos.
                                             <form action="{{ route('talles.delete', $category) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este talle?')">
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}
                                                 <button class="btn btn-danger btn-sm" type="submit">Borrar</button>
                                             </form>
+                                            --}}
                                         </div>
                                     @else
                                         <form action="{{ route('talles.resurrect', [$category]) }}" method="POST">
