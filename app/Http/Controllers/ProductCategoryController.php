@@ -108,6 +108,12 @@ class ProductCategoryController extends Controller
      */
     public function delete(ProductCategory $category)
     {
+        // No permitir borrar si hay productos dados de alta que la usan
+        $usados = \App\Product::where('id_categoria', $category->id)->count();
+        if ($usados > 0) {
+            return redirect('/admin/categorias/')->with('error', 'No se puede borrar la categoría "' . $category->nombre . '": la usa' . ($usados > 1 ? 'n ' . $usados . ' productos' : ' 1 producto') . '. Cambiales la categoría primero.');
+        }
+
         $category->update(['activa' => 0]);
         return redirect('/admin/categorias/');
     }
