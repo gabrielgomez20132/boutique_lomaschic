@@ -230,6 +230,10 @@
     </thead>
     <tbody v-if="keywords == null || keywords == ''">
         @foreach ($products as $product)
+            @php
+                // Valores por defecto: si el talle/color/categoria esta desactivado no se encuentra en la lista
+                $catNombre = '-'; $unidad = ''; $talleNombre = '-'; $colorNombre = '-';
+            @endphp
             @foreach ($categories as $category)
                 @if($product->id_categoria == $category->id)
                     @php
