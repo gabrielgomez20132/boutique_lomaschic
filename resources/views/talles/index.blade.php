@@ -2,6 +2,16 @@
 
 @section('content2')
 
+    @if(session()->has('error'))
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <strong>No se puede borrar.</strong>
+            {{ session()->get('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
     @if(session()->has('message'))
         <div class="alert alert-success alert-dismissible" role="alert">
             <strong>Operación Exitosa!</strong>
@@ -56,13 +66,11 @@
                                     @if($category->activa == 1)
                                         <div style="display: flex; gap: 5px;">
                                             <a href="{{ route('talles.edit', $category) }}" class="btn btn-primary btn-sm">Editar</a>
-                                            {{-- Borrar talle deshabilitado: si un producto usa el talle, rompe el listado de Productos.
                                             <form action="{{ route('talles.delete', $category) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este talle?')">
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}
                                                 <button class="btn btn-danger btn-sm" type="submit">Borrar</button>
                                             </form>
-                                            --}}
                                         </div>
                                     @else
                                         <form action="{{ route('talles.resurrect', [$category]) }}" method="POST">

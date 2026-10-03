@@ -104,6 +104,12 @@ class ProductTallesController extends Controller
      */
     public function delete(ProductTalle $category)
     {
+        // No permitir borrar si hay productos dados de alta que lo usan
+        $usados = \App\Product::where('id_talle', $category->id)->count();
+        if ($usados > 0) {
+            return redirect('/admin/talles/')->with('error', 'No se puede borrar el talle "' . $category->nombre . '": lo usa' . ($usados > 1 ? 'n ' . $usados . ' productos' : ' 1 producto') . '. Cambiales el talle primero.');
+        }
+
         $category->update(['activa' => 0]);
         return redirect('/admin/talles/');
     }

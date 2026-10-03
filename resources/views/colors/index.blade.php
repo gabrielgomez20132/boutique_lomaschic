@@ -2,6 +2,16 @@
 
 @section('content2')
 
+    @if(session()->has('error'))
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <strong>No se puede borrar.</strong>
+            {{ session()->get('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
     @if(session()->has('message'))
         <div class="alert alert-success alert-dismissible" role="alert">
             <strong>Operación Exitosa!</strong>
